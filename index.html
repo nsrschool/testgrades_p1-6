@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ระบบรายงานผลการเรียน ป.1-6 • หลักสูตร 2568</title>
+<title>NSR SMART ประถมศึกษา • ระบบสารสนเทศงานวิชาการและดูแลช่วยเหลือนักเรียน</title>
 
 <!-- ============================================================
      ⚙️ ตั้งค่า Web App URL  (จุดเดียวที่ต้องแก้)
@@ -11,7 +11,7 @@
      ตัวอย่าง: 'https://script.google.com/macros/s/AKfycb..../exec'
      ============================================================ -->
 <script>
-  window.WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbx-i040PiZLIcO7VTscWrZlDX6SQgoboO3se58jyaIJnuuoDFb7EvdQFCnMofqsnUDi/exec';
+  window.WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwAih8yJtqPp5j0kIv5oF6VU8jrqqFqJJq4iGdl5pMMaHYaLG37Ut3_y5OwDKB_OrexEg/exec';
 </script>
 
 <!-- Tailwind CSS -->
@@ -52,6 +52,12 @@
   .inp:focus{border-color:var(--kps-primary);box-shadow:0 0 0 3px rgba(13,148,136,.15)}
   .badge{font-size:.72rem;padding:.12rem .5rem;border-radius:99px;font-weight:600;}
   .nav-cat{font-size:11px;font-weight:700;color:#94a3b8;padding-left:.5rem;border-left:2px solid #e2e8f0;align-self:center;white-space:nowrap;}
+  .grpmenu{position:absolute;left:0;top:calc(100% + 6px);z-index:60;background:#fff;border:1px solid #e2e8f0;border-radius:14px;box-shadow:0 12px 32px rgba(15,118,110,.14);padding:6px;min-width:248px;max-height:70vh;overflow:auto;}
+  .navgroup:last-of-type .grpmenu{left:auto;right:0;}
+  .grpmenu .navitem{background:#fff;border:0;border-radius:10px;}
+  .grpmenu .navitem:hover{background:#f0fdfa;}
+  .grpbtn.tab-active{background:#0d9488;color:#fff;border-color:#0d9488;}
+  .grpcur{font-size:10px;opacity:.85;font-weight:400;max-width:130px;overflow:hidden;text-overflow:ellipsis;display:inline-block;vertical-align:middle;white-space:nowrap;}
   .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
   .cal-cell{min-height:84px;border:1px solid #e2e8f0;border-radius:10px;padding:5px 6px;background:#fff;display:flex;flex-direction:column;gap:3px;transition:.15s;}
   .cal-cell.dim{background:#f8fafc;color:#cbd5e1;}
@@ -100,9 +106,9 @@
 <!-- ====================== LOGIN SCREEN ====================== -->
 <div id="loginScreen" class="fixed inset-0 z-[80] bg-gradient-to-br from-teal-50 via-white to-amber-50 hidden items-center justify-center p-4">
   <div class="card p-6 w-full max-w-sm text-center">
-    <div class="text-4xl mb-1">🏫</div>
-    <h2 class="text-lg font-bold text-teal-700">เข้าสู่ระบบ</h2>
-    <p class="text-xs text-slate-400 mb-4">ระบบรายงานผลการเรียน ป.1-6 • หลักสูตร 2568</p>
+    <div id="loginLogo" class="mb-2 flex justify-center"><div class="text-4xl">🏫</div></div>
+    <h2 class="text-lg font-bold text-teal-700">NSR <span class="text-emerald-500">SMART</span> <span class="text-slate-600">ประถมศึกษา</span></h2>
+    <p class="text-xs text-slate-400 mb-4">ระบบสารสนเทศงานวิชาการและดูแลช่วยเหลือนักเรียน</p>
     <div class="space-y-2 text-left">
       <div>
         <label class="text-xs text-slate-500">เลือกชื่อ</label>
@@ -114,7 +120,6 @@
       </div>
     </div>
     <button onclick="doLogin()" class="btn bg-teal-600 hover:bg-teal-700 text-white w-full py-2.5 mt-4 text-sm">เข้าสู่ระบบ</button>
-    <p class="text-[11px] text-slate-400 mt-3">แอดมินเริ่มต้น: ชื่อ <b>แอดมิน</b> • PIN <b>1234</b> (เปลี่ยนได้ในเมนูจัดการครู)</p>
   </div>
 </div>
 
@@ -131,7 +136,7 @@
 
 <!-- ====================== HEADER ====================== -->
 <header class="text-center pt-5 pb-3 px-3">
-  <h1 id="hdrTitle" class="text-xl sm:text-2xl font-bold text-teal-700">ระบบรายงานผลการเรียน ป.1-6</h1>
+  <h1 id="hdrTitle" class="text-xl sm:text-2xl font-bold text-teal-700">NSR <span class="text-emerald-500">SMART</span> <span class="text-slate-600">ประถมศึกษา</span></h1>
   <p id="hdrSlogan" class="text-xs sm:text-sm text-slate-500 mt-0.5">หลักสูตรการศึกษาประถมศึกษาตอนต้น พุทธศักราช 2568 (เทียบเคียง 2551)</p>
   <div id="statusPill" class="hidden items-center gap-2 mt-2 bg-rose-50 border border-rose-200 rounded-full px-3 py-1 text-xs">
     <span id="statusDot" class="w-2 h-2 rounded-full bg-rose-500"></span>
@@ -149,34 +154,47 @@
   </div>
 </div>
 
-<!-- ====================== NAV TABS ====================== -->
+<!-- ====================== NAV TABS (จัดหมวด) ====================== -->
 <nav class="max-w-6xl mx-auto px-3 mt-4">
   <div class="flex flex-wrap items-center gap-2">
-    <button data-tab="home"     data-role="all"   class="navbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">🏠 หน้าแรก</button>
-    <span class="nav-cat" data-role="all">📚 งานวิชาการ</span>
-    <button data-tab="subjects" data-role="admin" class="navbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">🏫 จัดการรายวิชา</button>
-    <button data-tab="scores"   data-role="staff"   class="navbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">📝 บันทึกผลการเรียน</button>
-    <button data-tab="teachdoc" data-role="staff"   class="navbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">📤 ส่งเอกสารการสอน</button>
-    <button data-tab="subdoc"   data-role="staff"   class="navbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">📚 คำอธิบาย/โครงสร้างวิชา</button>
-    <button data-tab="profile"  data-role="staff"   class="navbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">🪪 ประวัตินักเรียน</button>
-    <button data-tab="former"   data-role="director" class="navbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">🗃️ นักเรียนจำหน่าย</button>
-    <button data-tab="teachsum" data-role="director" class="navbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">📂 ติดตามเอกสารการสอน</button>
-    <button data-tab="scoretrack" data-role="director" class="navbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">📈 ติดตามการกรอกคะแนน</button>
-    <button data-tab="sar" data-role="director" class="navbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">📑 รายงาน SAR</button>
-    <button data-tab="supervise" data-role="director" class="navbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">🔍 นิเทศ/เยี่ยมชั้นเรียน</button>
-    <button data-tab="schedule" data-role="all"   class="navbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">🗓️ ตารางสอน</button>
-    <button data-tab="exam"     data-role="all"   class="navbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">🧪 ตารางสอบ</button>
-    <button data-tab="ability"  data-role="staff"   class="navbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">🎓 ความสามารถ/คุณลักษณะ</button>
-    <button data-tab="report"   data-role="all"   class="navbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">🖨️ พิมพ์ใบรายงาน</button>
-    <button data-tab="summary68" data-role="all"   class="navbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">📋 สรุปผลการเรียน</button>
-    <button data-tab="stats"    data-role="director" class="navbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">📊 รายงานสรุป</button>
-    <span class="nav-cat" data-role="all">🕒 งานปกครอง</span>
-    <button data-tab="attendance" data-role="staff"  class="navbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">✅ เช็คชื่อ</button>
-    <button data-tab="calendar"  data-role="all"  class="navbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">📅 ปฏิทินวิชาการ</button>
-    <button data-tab="risk"      data-role="all"  class="navbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">⚠️ นักเรียนเสี่ยง</button>
-    <span class="nav-cat" data-role="admin">⚙️ ผู้ดูแลระบบ</span>
-    <button data-tab="admin"    data-role="admin" class="navbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">🛠️ แอดมิน</button>
-    <button data-tab="settings" data-role="admin" class="navbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">⚙️ ตั้งค่าระบบ</button>
+    <button data-tab="home" data-role="all" class="navbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">🏠 หน้าแรก</button>
+    <div class="navgroup relative" id="grp-acad">
+      <button type="button" onclick="toggleGrp('acad')" class="grpbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">🎓 งานวิชาการ <span id="cur-acad" class="grpcur"></span><span class="opacity-50 ml-0.5">▾</span></button>
+      <div id="menu-acad" class="grpmenu hidden">
+        <button data-tab="subjects" data-role="admin" class="navbtn navitem btn w-full text-left whitespace-nowrap px-3 py-2 text-sm">🏫 จัดการรายวิชา</button>
+        <button data-tab="scores" data-role="staff" class="navbtn navitem btn w-full text-left whitespace-nowrap px-3 py-2 text-sm">📝 บันทึกผลการเรียน</button>
+        <button data-tab="teachdoc" data-role="staff" class="navbtn navitem btn w-full text-left whitespace-nowrap px-3 py-2 text-sm">📤 ส่งเอกสารการสอน</button>
+        <button data-tab="subdoc" data-role="staff" class="navbtn navitem btn w-full text-left whitespace-nowrap px-3 py-2 text-sm">📚 คำอธิบาย/โครงสร้างวิชา</button>
+        <button data-tab="ability" data-role="staff" class="navbtn navitem btn w-full text-left whitespace-nowrap px-3 py-2 text-sm">🎓 ความสามารถ/คุณลักษณะ</button>
+        <button data-tab="report" data-role="all" class="navbtn navitem btn w-full text-left whitespace-nowrap px-3 py-2 text-sm">🖨️ พิมพ์ใบรายงาน</button>
+        <button data-tab="summary68" data-role="all" class="navbtn navitem btn w-full text-left whitespace-nowrap px-3 py-2 text-sm">📋 สรุปผลการเรียน</button>
+        <button data-tab="schedule" data-role="all" class="navbtn navitem btn w-full text-left whitespace-nowrap px-3 py-2 text-sm">🗓️ ตารางสอน</button>
+        <button data-tab="exam" data-role="all" class="navbtn navitem btn w-full text-left whitespace-nowrap px-3 py-2 text-sm">🧪 ตารางสอบ</button>
+        <button data-tab="calendar" data-role="all" class="navbtn navitem btn w-full text-left whitespace-nowrap px-3 py-2 text-sm">📅 ปฏิทินวิชาการ</button>
+        <button data-tab="scoretrack" data-role="director" class="navbtn navitem btn w-full text-left whitespace-nowrap px-3 py-2 text-sm">📈 ติดตามการกรอกคะแนน</button>
+        <button data-tab="teachsum" data-role="director" class="navbtn navitem btn w-full text-left whitespace-nowrap px-3 py-2 text-sm">📂 ติดตามเอกสารการสอน</button>
+        <button data-tab="supervise" data-role="director" class="navbtn navitem btn w-full text-left whitespace-nowrap px-3 py-2 text-sm">🔍 นิเทศ/เยี่ยมชั้นเรียน</button>
+        <button data-tab="stats" data-role="director" class="navbtn navitem btn w-full text-left whitespace-nowrap px-3 py-2 text-sm">📊 รายงานสรุป</button>
+        <button data-tab="sar" data-role="director" class="navbtn navitem btn w-full text-left whitespace-nowrap px-3 py-2 text-sm">📑 รายงาน SAR</button>
+      </div>
+    </div>
+    <div class="navgroup relative" id="grp-care">
+      <button type="button" onclick="toggleGrp('care')" class="grpbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">🛡️ งานปกครอง <span id="cur-care" class="grpcur"></span><span class="opacity-50 ml-0.5">▾</span></button>
+      <div id="menu-care" class="grpmenu hidden">
+        <button data-tab="attendance" data-role="staff" class="navbtn navitem btn w-full text-left whitespace-nowrap px-3 py-2 text-sm">✅ เช็คชื่อ</button>
+        <button data-tab="profile" data-role="staff" class="navbtn navitem btn w-full text-left whitespace-nowrap px-3 py-2 text-sm">🪪 ประวัตินักเรียน (SDQ/เยี่ยมบ้าน)</button>
+        <button data-tab="risk" data-role="all" class="navbtn navitem btn w-full text-left whitespace-nowrap px-3 py-2 text-sm">⚠️ นักเรียนเสี่ยง</button>
+        <button data-tab="former" data-role="director" class="navbtn navitem btn w-full text-left whitespace-nowrap px-3 py-2 text-sm">🗃️ นักเรียนจำหน่าย</button>
+      </div>
+    </div>
+    <div class="navgroup relative" id="grp-adm">
+      <button type="button" onclick="toggleGrp('adm')" class="grpbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">🛠️ ผู้ดูแลระบบ <span id="cur-adm" class="grpcur"></span><span class="opacity-50 ml-0.5">▾</span></button>
+      <div id="menu-adm" class="grpmenu hidden">
+        <button data-tab="admin" data-role="admin" class="navbtn navitem btn w-full text-left whitespace-nowrap px-3 py-2 text-sm">🛠️ แอดมิน</button>
+        <button data-tab="settings" data-role="admin" class="navbtn navitem btn w-full text-left whitespace-nowrap px-3 py-2 text-sm">⚙️ ตั้งค่าระบบ</button>
+      </div>
+    </div>
+    <button data-tab="manual" data-role="all" class="navbtn btn whitespace-nowrap px-4 py-2 text-sm bg-white border border-slate-200">📖 คู่มือ</button>
   </div>
 </nav>
 
@@ -1706,6 +1724,33 @@ function normalizeRemark(v){
 /* ============================================================
    TABS
    ============================================================ */
+// ---- แถบเมนูแบบหมวด ----
+function toggleGrp(gid){
+  const menu=document.getElementById('menu-'+gid);
+  const open=menu && menu.classList.contains('hidden');
+  document.querySelectorAll('.grpmenu').forEach(m=>m.classList.add('hidden'));
+  if(open) menu.classList.remove('hidden');
+}
+document.addEventListener('click', e=>{
+  if(!e.target.closest('.navgroup')) document.querySelectorAll('.grpmenu').forEach(m=>m.classList.add('hidden'));
+});
+// ซ่อนปุ่มหมวดเมื่อไม่มีเมนูลูกที่มองเห็นได้ตามสิทธิ์ (เรียกหลัง applyRole)
+function updateNavGroups(){
+  document.querySelectorAll('.navgroup').forEach(g=>{
+    const any=[...g.querySelectorAll('.navitem')].some(b=>b.style.display!=='none');
+    g.style.display=any?'':'none';
+  });
+}
+// ปุ่มหมวดติดสี + โชว์ชื่อเมนูปัจจุบัน
+function navSyncGroups(name){
+  document.querySelectorAll('.grpmenu').forEach(m=>m.classList.add('hidden'));
+  document.querySelectorAll('.navgroup').forEach(g=>{
+    const act=[...g.querySelectorAll('.navitem')].find(b=>b.dataset.tab===name);
+    const btn=g.querySelector('.grpbtn'), cur=g.querySelector('.grpcur');
+    btn.classList.toggle('tab-active', !!act);
+    if(cur) cur.textContent=act?(' · '+act.textContent.trim()):'';
+  });
+}
 function switchTab(name){
   document.querySelectorAll('.tabpane').forEach(p=>p.classList.add('hidden'));
   document.getElementById('tab-'+name).classList.remove('hidden');
@@ -1713,6 +1758,7 @@ function switchTab(name){
   document.querySelectorAll('.navbtn').forEach(b=>{
     b.classList.toggle('tab-active', b.dataset.tab===name);
   });
+  navSyncGroups(name);
   if(name==='home') renderHome();
   if(name==='settings'){ switchSub('school'); fillExClass(); }
   if(name==='scores') fillScoreSubjects();
@@ -1793,6 +1839,14 @@ const BOOT_SNAP_KEY='nsr_boot_v1';
 const EDGE_BOOT_URL='data/boot.json';
 const EDGE_TODAY_URL='data/today.json';
 // ป้ายบอกแหล่งข้อมูล/ความสดใหม่ บนแถบสถานะบนสุด
+function applyLoginLogo(){
+  const box=document.getElementById('loginLogo'); if(!box) return;
+  let src=LOGIN_LOGO_BASE64 && LOGIN_LOGO_BASE64.trim();
+  if(src && !src.startsWith('data:')) src='data:image/png;base64,'+src;
+  if(!src) src=(state.settings&&state.settings.logoURL)||'';
+  if(!src) return; // ไม่มีทั้งคู่ → คงอิโมจิ 🏫 ไว้
+  box.innerHTML=`<img src="${esc(src)}" alt="โลโก้โรงเรียน" class="w-20 h-20 object-contain">`;
+}
 function edgeInfoUpdate(mode, at){
   const el=document.getElementById('edgeInfo'); if(!el) return;
   const hm=at?new Date(at).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'}):'';
@@ -1888,7 +1942,10 @@ function setStatus(ok){
    ============================================================ */
 function applySettingsToUI(){
   const s=state.settings;
-  document.getElementById('hdrTitle').textContent='ระบบรายงานผลการเรียน ป.1-6'+(s.schoolName?' • '+s.schoolName:'');
+  // ชื่อระบบ: แก้ที่ค่าคงที่ APP_NAME/APP_TAGLINE จุดเดียว (บนสุดของสคริปต์)
+  document.getElementById('hdrTitle').innerHTML=APP_NAME_HTML;
+  applyLoginLogo();
+  document.getElementById('hdrSlogan').textContent=APP_TAGLINE+(s.schoolName?' • '+s.schoolName:'');
   document.getElementById('hdrSlogan').textContent=(s.slogan||'')+' • ปีการศึกษา '+(s.academicYear||'');
   const map={set_schoolName:'schoolName',set_slogan:'slogan',set_academicYear:'academicYear',
     set_area:'area',set_directorName:'directorName',set_deputyName:'deputyName',set_remark:'remark',set_reportDate:'reportDate',
@@ -3354,6 +3411,7 @@ function applyRole(){
     else show=false;
     el.style.display = show ? '' : 'none';
   });
+  updateNavGroups();
   const label = admin?' • แอดมิน':(director?' • ผู้บริหาร':'');
   document.getElementById('userChip').textContent='👤 '+state.currentUser.name+label;
   document.getElementById('userBar').classList.remove('hidden');
@@ -3617,7 +3675,14 @@ async function runHealthFix(type){
 /* ============================================================
    แถบปฏิทินสถานะการเช็คชื่อรายเดือน (เสาธง + รายคาบ)
    ============================================================ */
-const APP_BUILD='v26.08-F'; // เลขเวอร์ชันหน้าเว็บ — ใช้เช็คว่าไฟล์ล่าสุดขึ้น GitHub Pages แล้วหรือยัง
+// ===== โลโก้โรงเรียนหน้า Login =====
+// วางโค้ด base64 ของโลโก้ระหว่างเครื่องหมายคำพูดด้านล่าง (วางได้ทั้งแบบเต็ม "data:image/png;base64,..." หรือเฉพาะตัว base64 ล้วนๆ)
+// ปล่อยว่าง = ระบบจะใช้โลโก้จากเมนูตั้งค่าระบบ (logoURL) แทนอัตโนมัติ ถ้าไม่มีทั้งคู่จะแสดง 🏫
+const LOGIN_LOGO_BASE64='';
+const APP_NAME='NSR SMART ประถมศึกษา';
+const APP_NAME_HTML='NSR <span class="text-emerald-500">SMART</span> <span class="text-slate-600">ประถมศึกษา</span>';
+const APP_TAGLINE='ระบบสารสนเทศงานวิชาการและดูแลช่วยเหลือนักเรียน';
+const APP_BUILD='v26.08-I'; // เลขเวอร์ชันหน้าเว็บ — ใช้เช็คว่าไฟล์ล่าสุดขึ้น GitHub Pages แล้วหรือยัง
 const TH_M_ABBR=['','ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
 // โหลดรายการ (วัน|ห้อง|คาบ) ที่เช็คแล้วของเดือนนั้น (cache ต่อเดือน)
 async function attMonthKeys(month){
@@ -7439,6 +7504,7 @@ async function startApp(){
   }catch(e){ try{ localStorage.removeItem('kps_session'); }catch(_){} }
   showLoginScreen();
 }
+applyLoginLogo(); // แสดงโลโก้ทันทีตั้งแต่ยังไม่ล็อกอิน
 startApp();
 </script>
 </body>
