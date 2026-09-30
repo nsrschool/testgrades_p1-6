@@ -137,7 +137,7 @@
 <!-- ====================== HEADER ====================== -->
 <header class="text-center pt-5 pb-3 px-3">
   <h1 id="hdrTitle" class="text-xl sm:text-2xl font-bold text-teal-700">NSR <span class="text-emerald-500">SMART</span> <span class="text-slate-600">ประถมศึกษา</span></h1>
-  <p id="hdrSlogan" class="text-xs sm:text-sm text-slate-500 mt-0.5">หลักสูตรการศึกษาประถมศึกษาตอนต้น พุทธศักราช 2568 (เทียบเคียง 2551)</p>
+  <p id="hdrSlogan" class="text-xs sm:text-sm text-slate-500 mt-0.5">หลักสูตรการศึกษาประถมศึกษา พุทธศักราช 2568 (เทียบเคียง 2551)</p>
   <div id="statusPill" class="hidden items-center gap-2 mt-2 bg-rose-50 border border-rose-200 rounded-full px-3 py-1 text-xs">
     <span id="statusDot" class="w-2 h-2 rounded-full bg-rose-500"></span>
     <span id="statusText" class="text-rose-500"></span>
@@ -1713,7 +1713,7 @@ function formatReportDate(v){
   return v;
 }
 
-const DEFAULT_REMARK='โรงเรียนในโครงการขับเคลื่อนหลักสูตรการศึกษาประถมศึกษาตอนต้น (ชั้นประถมศึกษาปีที่ 1 - 6) พุทธศักราช 2568';
+const DEFAULT_REMARK='โรงเรียนในโครงการขับเคลื่อนหลักสูตรการศึกษาประถมศึกษา 2568';
 // แทนที่หมายเหตุค่าตั้งต้นเดิม (เลขไทย/ป.๑-๓) ด้วยข้อความใหม่ ; ข้อความที่ผู้ใช้แก้เองคงไว้
 function normalizeRemark(v){
   if(!v) return DEFAULT_REMARK;
@@ -2677,7 +2677,7 @@ function reportPageHTML(s, rs){
     <div style="display:flex;align-items:center;justify-content:center;gap:10px;text-align:center">
       ${logo}
       <div>
-        <div style="font-weight:700;font-size:15px">ใบรายงานผลสัมฤทธิ์ทางการเรียน ระดับประถมศึกษาตอนต้น &nbsp;&nbsp; ปีการศึกษา ${esc(s.academicYear)}</div>
+        <div style="font-weight:700;font-size:15px">แบบรายงานผลการเรียนรู้ระดับประถมศึกษา &nbsp;&nbsp; ปีการศึกษา ${esc(s.academicYear)}</div>
         <div style="font-size:13px">${esc(s.schoolName)} ${esc(s.area||'')}</div>
       </div>
     </div>
@@ -2690,7 +2690,7 @@ function reportPageHTML(s, rs){
     <div style="display:grid;grid-template-columns:1fr 1.18fr;gap:6px;align-items:start">
       <table class="rp-tbl">
         <thead>
-          <tr><th class="rp-head-68" colspan="2">หลักสูตรการศึกษาประถมศึกษาตอนต้น พุทธศักราช 2568</th></tr>
+          <tr><th class="rp-head-68" colspan="2">หลักสูตรการศึกษาประถมศึกษา พุทธศักราช 2568</th></tr>
           <tr><th>ความสามารถผู้เรียน</th><th style="width:80px">ระดับความสามารถ</th></tr>
         </thead>
         <tbody>${leftRows||'<tr><td colspan="2" style="text-align:center;color:#888">ยังไม่มีข้อมูล</td></tr>'}</tbody>
